@@ -1,0 +1,12 @@
+# dist folder for static web assets
+dist/
+
+# node modules (npm libraries)
+node_modules/
+
+# visual studio code
+.vscode/
+
+# yarn installer  (dependncy management)
+yarn.lock
+yarn-error.log
