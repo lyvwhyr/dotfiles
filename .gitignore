@@ -4,8 +4,6 @@ dist/
 # node modules (npm libraries)
 node_modules/
 
-# visual studio code
-.vscode/
 
 # yarn installer  (dependncy management)
 yarn.lock

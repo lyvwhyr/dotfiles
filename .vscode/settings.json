@@ -1,0 +1,43 @@
+{
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "'Fira Code', 'IBM Plex Mono', 'Victor Mono', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+  "workbench.colorTheme": "Gloom",
+  "workbench.iconTheme": "material-icon-theme",
+  "gitlens.advanced.messages": {
+    "suppressShowKeyBindingsNotice": true
+  },
+  "editor.autoIndent": true,
+  "editor.trimAutoWhitespace": true,
+  "editor.cursorBlinking": "smooth",
+  "files.trimFinalNewlines": true,
+  "breadcrumbs.enabled": true,
+  "editor.cursorWidth": 5,
+  "git.autofetch": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "editor.renderWhitespace": "all",
+  "files.autoSave": "off",
+  "editor.renderIndentGuides": true,
+  "files.trimTrailingWhitespace": true,
+  "window.zoomLevel": -1,
+  "editor.fontSize": 15,
+  "editor.renderControlCharacters": true,
+  "editor.minimap.enabled": true,
+  "editor.rulers": [
+    80,
+    120
+  ],
+  "cSpell.allowCompoundWords": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true
+  },
+  "cSpell.words": [
+    "labelledby",
+    "mgahan"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "git.ignoreLimitWarning": true
+}
