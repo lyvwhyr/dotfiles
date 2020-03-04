@@ -6,7 +6,7 @@
   "gitlens.advanced.messages": {
     "suppressShowKeyBindingsNotice": true
   },
-  "editor.autoIndent": true,
+  "editor.autoIndent": "full",
   "editor.trimAutoWhitespace": true,
   "editor.cursorBlinking": "smooth",
   "files.trimFinalNewlines": true,
