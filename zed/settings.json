@@ -1,0 +1,58 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run the `zed: Open Default Settings` command
+// from the command palette
+{
+  "autosave": "on_focus_change",
+  "autosave_after_delay": 5000,
+  // Code completion settings
+  "features": {
+    "inline_completion_provider": "supermaven"
+  },
+  // Text wrapping settings
+  "wrap_guides": [80, 120],
+  "format_on_save": "on",
+  "ui_font_size": 14,
+  "buffer_font_size": 13,
+  "buffer_font_family": "IBM Plex Mono",
+  "theme": {
+    "mode": "dark",
+    "light": "KTRZ Monokai",
+    "dark": "KTRZ Monokai"
+  },
+  // Code formatting
+  // Python
+  "language_overrides": {
+    "Python": {
+      "language_servers": ["pyright", "ruff"],
+      "formatter": [
+        {
+          "code_actions": {
+            // Fix all auto-fixable lint violations
+            "source.fixAll.ruff": true,
+            "source.fixAll.ruff.fixAll": true,
+            // Organize imports
+            "source.organizeImports.ruff": true
+          }
+        }
+      ]
+    }
+  }
+  // "lsp": {
+  //   "ruff": {
+  //     "initialization_options": {
+  //       "settings": {
+  //         // Ruff server settings goes here
+  //         "lineLength": 80,
+  //         "lint": {
+  //           "extendSelect": ["I"]
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+}

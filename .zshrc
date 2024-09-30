@@ -3,40 +3,39 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="kolo"
+# ZSH_THEME="random"
+ZSH_THEME="agnoster"
 
-plugins=( 
+plugins=(
     git
-    archlinux
-    # zsh-autosuggestions
+    zsh-autosuggestions
     zsh-syntax-highlighting
+    poetry
 )
 
 source $ZSH/oh-my-zsh.sh
 
-# Check archlinux plugin commands here
-# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/archlinux
-
+# Pyenv PATHS
+# source  $HOME/pyenv_paths.sh
 
 # Display Pokemon-colorscripts
 # Project page: https://gitlab.com/phoneybadger/pokemon-colorscripts#on-other-distros-and-macos
 pokemon-colorscripts --no-title -s -r 1
 
 
-### From this line is for pywal-colors
-# Import colorscheme from 'wal' asynchronously
-# &   # Run the process in the background.
-# ( ) # Hide shell job control messages.
-# Not supported in the "fish" shell.
-#(cat ~/.cache/wal/sequences &)
+# Set-up icons for files/folders in terminal using eza
+alias ls='eza -a --icons'
+alias ll='eza -al --icons'
+alias lt='eza -a --tree --level=1 --icons'
 
-# Alternative (blocks terminal for 0-3ms)
-#cat ~/.cache/wal/sequences
-
-# To add support for TTYs this line can be optionally added.
-#source ~/.cache/wal/colors-tty.sh
+export PATH=$HOME/.local/bin:$PATH
 
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# bun completions
+[ -s "/home/feral/.bun/_bun" ] && source "/home/feral/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+# export PATH="/usr/local/bin/"
