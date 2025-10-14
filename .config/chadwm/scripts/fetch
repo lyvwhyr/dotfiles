@@ -1,0 +1,96 @@
+#!/bin/bash
+set -euo pipefail
+
+clear
+
+# Build color codes c0..c7 (fg 30–37) and b0..b7 (bg 40–47)
+c=3 b=4
+for j in c b; do
+  for i in {0..7}; do
+    printf -v "${j}${i}" "%b" "\e${!j}${i}m"
+  done
+done
+reset="\e[0m"
+
+user=$(whoami)
+host=$(hostname)
+os=$(. /etc/os-release && printf '%s' "$PRETTY_NAME")
+kernel=$(uname -sr)
+
+# Window manager name (guard if no X or xprop missing)
+wm="N/A"
+if command -v xprop >/dev/null 2>&1 && xprop -root >/dev/null 2>&1; then
+  wm_id=$(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}')
+  if [ -n "${wm_id:-}" ]; then
+    wm=$(xprop -id "$wm_id" -notype -f _NET_WM_NAME 8t 2>/dev/null \
+         | awk -F\" '/WM_NAME/{print $2}')
+  fi
+fi
+
+# Memory MiB used/total
+mem=$(free -m | awk '/^Mem:/ {print $3}')
+mem_total=$(free -m | awk '/^Mem:/ {print $2}')
+
+# Package count across common distros
+if command -v xbps-query >/dev/null 2>&1; then
+  pkgs=$(xbps-query -l | wc -l)
+elif command -v pacman >/dev/null 2>&1; then
+  pkgs=$(pacman -Qq | wc -l)
+elif command -v dpkg-query >/dev/null 2>&1; then
+  pkgs=$(dpkg-query -f '.\n' -W | wc -l)
+elif command -v rpm >/dev/null 2>&1; then
+  pkgs=$(rpm -qa | wc -l)
+else
+  pkgs="N/A"
+fi
+
+# Shell name
+shell="${SHELL##*/}"
+
+# Color swatch (foreground 30–37)
+colors=""
+for i in {0..7}; do
+  colors+=$(printf "\e[3%dm▁▁▁" "$i")
+done
+colors+="$reset"
+
+get_uptime() {
+  IFS=. read -r s _ </proc/uptime
+  d=$((s/86400)); h=$((s/3600%24)); m=$((s/60%60))
+  out=""
+  [ "$d" -gt 0 ] && out+="${d}d "
+  [ "$h" -gt 0 ] && out+="${h}h "
+  [ "$m" -gt 0 ] && out+="${m}m "
+  printf '%s' "${out:-0m}"
+}
+
+# Detect init (runit/systemd/openrc/etc)
+init="unknown"
+if readlink -f /sbin/init >/dev/null 2>&1; then
+  init_path=$(readlink -f /sbin/init)
+  init=${init_path##*/}
+  init=${init%%-*}
+fi
+
+cat <<EOF
+${c0} ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+${c0} ▎▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▎ ${c2} ${c0} ${c3} ${c0}${c1}  ${c0}▎ ${c1}${c4}${c1} ${c4}${user}@${c1}${host}${reset}
+${c0} ▎                            ▎ ${c4}
+${c0} ▎        ${c4}█▀▀▀▀▀▀▀▀▀█${c0}         ▎ ${c4}OS     ${c7} ${os}${reset}
+${c0} ▎        ${c4}█         █${c0}         ▎ ${c4}Kernel ${c7} ${kernel}${reset}
+${c0} ▎        ${c4}█  █   █  █${c0}         ▎ ${c4}WM     ${c7} ${wm}${reset}
+${c0} ▎        ${c0}█         █${c0}         ▎ ${c4}Shell  ${c7} ${shell}${reset}
+${c0} ▎        ${c0}▀█▄▄▄▄▄▄▄█▀${c0}         ▎ ${c4}Init   ${c7} ${init}${reset}
+${c0} ▎                            ▎ ${c4}pkgs   ${c7} ${pkgs}${reset}
+${c0} ▎                            ▎ ${c4}uptime ${c7} $(get_uptime)${reset}
+${c0} ▎   ${c4}void    runit ^_^    ${c0} ▎ ${c4}memory ${c7} ${mem} / ${mem_total} MiB${reset}
+${c0} ▎▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▎ ${colors}
+EOF
+
+# Optional bold background palette with -b
+if [[ "${1:-}" == "-b" ]]; then
+  for f in {0..6}; do printf "\033[$((f+41))m\033[$((f+30))m██▓▒░"; done
+  printf "\033[37m██\n\n"
+  for f in {0..6}; do printf "\033[$((f+41))m\033[1;$((f+30))m██▓▒░"; done
+  printf "\033[1;37m██\033[0m\n\n"
+fi
