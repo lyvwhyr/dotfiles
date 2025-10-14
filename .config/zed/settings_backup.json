@@ -7,61 +7,44 @@
 // custom settings, run the `zed: Open Default Settings` command
 // from the command palette
 {
-  "context_servers": {
-    "microsoft.docs.mcp": {
-      "source": "custom",
-      "enabled": false,
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://learn.microsoft.com/api/mcp"]
-    }
-  },
-  "inlay_hints": {
-    "enabled": true,
-    "show_type_hints": true,
-    "show_parameter_hints": true,
-    "show_other_hints": true
-  },
-  "calls": {
-    // Join calls with the microphone live by default
-    "mute_on_join": true,
-    // Share your project when you are the first to join a channel
-    "share_on_join": false
-  },
-  "project_panel": { "entry_spacing": "standard" },
   "ssh_connections": [
     {
-      "host": "44.212.19.94",
-      "username": "admin",
+      "host": "54.157.226.75",
+      "username": "ubuntu",
       "projects": [
         {
-          "paths": ["/home/admin"]
+          "paths": [
+            "/home/ubuntu/ehrmai"
+          ]
         },
         {
-          "paths": ["/home/admin/palladium"]
+          "paths": [
+            "/home/ubuntu/ehrmai/backend"
+          ]
         },
         {
-          "paths": ["/home/admin/palladium/__init__.py"]
-        }
-      ]
-    },
-    {
-      "host": "192.168.0.143",
-      "username": "root",
-      "projects": [
-        {
-          "paths": ["/root"]
+          "paths": [
+            "/home/ubuntu/ehrmai/ehrmai"
+          ]
         },
         {
-          "paths": ["/root/www"]
+          "paths": [
+            "/home/ubuntu/ehrmai/frontend"
+          ]
+        },
+        {
+          "paths": [
+            "/home/ubuntu/ehrmai/quartermaster"
+          ]
         }
       ],
-      "nickname": "gibson-docker"
+      "nickname": "ehrm med EC2  Ubuntu"
     }
   ],
   "restore_on_startup": "last_workspace",
   "cursor_shape": "bar",
   "edit_predictions": {
-    "disabled_globs": ["*lock*", "node_modules/*", "*.pyc"],
+    "disabled_globs": [],
     "mode": "eager",
     "copilot": {
       "proxy": null,
@@ -69,9 +52,8 @@
     },
     "enabled_in_text_threads": false
   },
-  "show_whitespaces": "all",
+  "show_whites paces": "all",
   "agent": {
-    "play_sound_when_agent_done": true,
     "default_profile": "write",
     "always_allow_tool_actions": true,
     "profiles": {
@@ -102,8 +84,9 @@
     },
     "default_model": {
       "provider": "google",
-      "model": "gemini-2.5-pro"
-    }
+      "model": "gemini-2.0-flash"
+    },
+    "version": "2"
   },
   "language_models": {
     "ollama": {
@@ -117,22 +100,25 @@
         {
           "name": "llama4:latest",
           "display_name": "Llama 4 8B",
-          "supports_tools": true,
+          "description": "Llama 4 is Meta's latest open-source large language model, excelling in various NLP tasks.",
           "max_tokens": 8192
         },
         {
           "name": "gemma3:4b",
           "display_name": "Gemma 3 4B",
+          "description": "Gemma 3 is a family of open models from Google, known for their strong performance and efficiency.",
           "max_tokens": 8192
         },
         {
           "name": "mistral-nemo",
           "display_name": "Mistral NEMO",
+          "description": "A Mistral model optimized for coding tasks.",
           "max_tokens": 32768
         },
         {
           "name": "reader-lm",
           "display_name": "Reader LM",
+          "description": "Reader LM, designed for processing and understanding text, is well-suited for tasks involving summarization and question answering.",
           "max_tokens": 8192
         }
       ]
@@ -153,6 +139,7 @@
     "right_padding": 0.15
   },
   "autosave": "on_focus_change",
+  "autosave_after_delay": 5000,
   // Code completion settings
   "features": {
     "edit_prediction_provider": "supermaven"
@@ -160,10 +147,9 @@
   // Text wrapping settings
   "wrap_guides": [80, 120],
   "format_on_save": "on",
-  "ui_font_size": 12,
-  "buffer_font_size": 12.0,
-  "ui_font_family": "IBM Plex Mono",
-  "buffer_font_family": "IBM Plex Mono",
+  "ui_font_size": 13,
+  "buffer_font_size": 13.0,
+  // "buffer_font_family": "IBM Plex Mono",
   "theme": {
     "mode": "dark",
     "light": "KTRZ Monokai",
@@ -171,49 +157,60 @@
   },
   "languages": {
     // Refer https://zed.dev/docs/languages/javascript and https://zed.dev/docs/languages/typescript for more info
-    // "TypeScript": {
-    //   // Refer https://github.com/jellydn/ts-inlay-hints for how to setup for Neovim and VSCode
-    //   "inlay_hints": {
-    //     "enabled": true,
-    //     "show_parameter_hints": false,
-    //     "show_other_hints": true,
-    //     "show_type_hints": true
-    //   }
-    // }
+    "TypeScript": {
+      // Refer https://github.com/jellydn/ts-inlay-hints for how to setup for Neovim and VSCode
+      "inlay_hints": {
+        "enabled": true,
+        "show_parameter_hints": false,
+        "show_other_hints": true,
+        "show_type_hints": true
+      }
+    },
     "Python": {
-      "language_servers": ["ty", "ruff", "!basedpyright", "!mypy"],
+      "language_servers": ["pyright", "ruff"],
       "format_on_save": "on",
       "formatter": [
         {
           "code_actions": {
-            "source.fixall.pyright": true,
             "source.organizeImports.ruff": true,
             "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    }
+  },
+  // Code formatting
+  // Python
+  "language_overrides": {
+    "Python": {
+      "language_servers": ["pyright", "ruff"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.fixall.pyright": true,
+            // Fix all auto-fixable lint violations
+            "source.fixAll.ruff": true,
+            // Organize imports
+            "source.organizeImports.ruff": true
           }
         }
       ]
     }
   },
   "lsp": {
-    "basedpyright": {
+    "pyright": {
       "settings": {
-        "basedpyright.analysis": {
-          "diagnosticMode": "workspace",
-          "inlayHints.callArgumentNames": false
-        }
+        "python.analysis.typeCheckingMode": "off"
+      },
+      "python": {
+        "pythonPath": ".venv/bin/python"
       }
     }
-    // "ty": {
-    //   "binary": {
-    //     "path": ".venv/bin/ty",2
-    //     "arguments": ["server"]
-    //   },
-    //   "settings": {
-    //     "ty": {
-    //       "disableLanguageServices": false
-    //     }
-    //   }
-    // }
   },
   // Use zed commit editor
   "terminal": {
