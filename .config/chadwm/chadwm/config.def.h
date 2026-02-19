@@ -26,12 +26,14 @@ static const int systraypinningfailfirst =
 static const int showsystray = 1; /* 0 means no systray */
 static const int showbar = 1;     /* 0 means no bar */
 static const int showtab = showtab_auto;
-static const int toptab = 1;   /* 0 means bottom tab */
-static const int floatbar = 1; /* 1 means the bar will float(don't have
-                                  padding),0 means the bar have padding */
-static const int topbar = 1;   /* 0 means bottom bar */
-static const int horizpadbar = 5;
-static const int vertpadbar = 11;
+static const int toptab = 1;       /* 0 means bottom tab */
+static const int floatbar = 1;     /* 1 means the bar will float(don't have
+                                      padding),0 means the bar have padding */
+static const int topbar = 1;       /* 0 means bottom bar */
+static const int horizpadbar = 10; // Increased from 5
+static const int vertpadbar = 18;  // Increased from 11
+#define ICONSIZE 24                // Increased from 19
+#define ICONSPACING 12             // Increased from 8
 static const int vertpadtab = 35;
 static const int horizpadtabi = 15;
 static const int horizpadtabo = 15;
@@ -39,12 +41,12 @@ static const int scalepreview = 4;
 static const int tag_preview = 0; /* 1 means enable, 0 is off */
 static const int colorfultag =
     1; /* 0 means use SchemeSel for selected non vacant tag */
-static const char *upvol[] = {"/usr/bin/pactl", "set-sink-volume", "0", "+5%",
-                              NULL};
-static const char *downvol[] = {"/usr/bin/pactl", "set-sink-volume", "0", "-5%",
-                                NULL};
-static const char *mutevol[] = {"/usr/bin/pactl", "set-sink-mute", "0",
-                                "toggle", NULL};
+static const char *upvol[] = {"/usr/bin/pactl", "set-sink-volume",
+                              "@DEFAULT_SINK@", "+5%", NULL};
+static const char *downvol[] = {"/usr/bin/pactl", "set-sink-volume",
+                                "@DEFAULT_SINK@", "-5%", NULL};
+static const char *mutevol[] = {"/usr/bin/pactl", "set-sink-mute",
+                                "@DEFAULT_SINK@", "toggle", NULL};
 static const char *light_up[] = {"/usr/bin/light", "-A", "5", NULL};
 static const char *light_down[] = {"/usr/bin/light", "-U", "5", NULL};
 static const int new_window_attach_on_end =
@@ -54,10 +56,12 @@ static const int new_window_attach_on_end =
 #define ICONSPACING 8 /* space between icon and title */
 
 static const char *fonts[] = {
-    "IBM Plex Mono:size=12:antialias=true:autohint=true",
-    "Symbols Nerd Font:size=12:antialias=true:autohint=true",
-    "Iosevka:style:medium:size=12",
-    "JetBrainsMono Nerd Font Mono:style:medium:size=19"};
+    "IBM Plex Mono:size=14:antialias=true:autohint=true", // Increased to 14
+    "Symbols Nerd Font:size=14:antialias=true:autohint=true",
+    "Iosevka:style:medium:size=14",
+    "JetBrainsMono Nerd Font Mono:style:medium:size=22" // Increased for large
+                                                        // titles
+};
 
 // theme
 #include "themes/onedark.h"
@@ -90,14 +94,16 @@ static const char *nm_editor[] = {"nm-connection-editor", NULL};
 static const char *thunarcmd[] = {"thunar", NULL};
 static const char *mullvadtoggle[] = {
     "/bin/sh", "-c", "$HOME/.local/bin/mullvad-toggle.sh", NULL};
+static const char *tailscaletoggle[] = {
+    "/bin/sh", "-c", "$HOME/.local/bin/tailscale-toggle.sh", NULL};
 
 static const Launcher launchers[] = {
     /* command     name to display */
     {eww, ""},
     {nm_editor, ""},
-    {thunarcmd, "📁"},
-    {mullvadtoggle, "🛰️"},
-};
+    {thunarcmd, ""},
+    {mullvadtoggle, ""},
+    {tailscaletoggle, ""}};
 
 static const int tagschemes[] = {SchemeTag1, SchemeTag2, SchemeTag3, SchemeTag4,
                                  SchemeTag5};
@@ -185,9 +191,8 @@ static const char *settings[] = {"gnome-control-center",
 static const char *display[] = {"arandr", NULL}; /* display settings */
 static const char *poweroffcmd[] = {"systemctl", "poweroff", NULL};
 static const char *rebootcmd[] = {"systemctl", "reboot", NULL};
-static const char *suspendcmd[] = {"systemctl", "suspend", NULL};
-static const char *lockcmd[] = {"/bin/sh", "-c", "$HOME/.local/bin/lock.sh",
-                                NULL};
+static const char *lockcmd[] = {"/bin/sh", "-c",
+                                "$HOME/.config/chadwm/scripts/lock.sh", NULL};
 
 /* commands */
 
@@ -290,11 +295,7 @@ static const Key keys[] = {
     {MODKEY | ShiftMask,
      XK_b,
      spawn,
-     {.v = rebootcmd}}, /* Win Shift b: reboot */
-    {MODKEY | ShiftMask,
-     XK_s,
-     spawn,
-     {.v = suspendcmd}},                      /* Win Shift s: sleep */
+     {.v = rebootcmd}},                       /* Win Shift b: reboot */
     {MODKEY | ShiftMask, XK_r, restart, {0}}, /* Win Shift r: refresh session */
     {MODKEY | ControlMask, XK_r, restart, {0}}, /* Win Ctrl r: restart WM */
 
